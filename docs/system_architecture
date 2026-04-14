@@ -1,0 +1,24 @@
+Definición de 6DOF en este robot:
+
+Para mover todas las articulaciones se usarán cycloidal drives de diferentes ratios según donde estén. 
+
+
+Para los axis 1,2 y 3, se usará la siguiente configuración:
+
+Motor -> Correa -> Cycloidal -> Encoder -> Articulación
+
+La correa cumple la función de aumentar la desmultiplicación del cycloidal drive, sin aumentar el tamaño de este. Es necesario debido a que estas articulaciones son las que mayor esfuerzo realizan.
+
+
+Para los axis 4, 5 y 6, se usará la siguiente configuración:
+
+Motor -> Cycloidal -> Encoder -> Articulación
+
+La correa no es necesaria ya que no hay tanto esfuerzo.
+
+
+
+
+
+
+

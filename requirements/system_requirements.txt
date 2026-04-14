@@ -1,0 +1,25 @@
+**# Functional Requirements**
+
+[ ] El robot debe tener 6 DOF
+[ ] Debe ejecutar trayectorias predefinidas
+[ ] Debe ser capaz de agarrar objetos
+
+
+**# Performance Requirements**
+
+[ ] Carga máxima: 1 kg con brazo extendido
+[ ] Precisión objetivo: ±X mm (lo definirás luego)
+[ ] Repetibilidad: ±X mm
+
+
+**# Constraints**
+
+[ ] Presupuesto < 300€
+[ ] Volumen de impresión limitado a Ender 3
+[ ] Controlador STM32
+
+
+**# System Requirements**
+
+[ ] Control en lazo cerrado
+[ ] Modelo dinámico implementado
