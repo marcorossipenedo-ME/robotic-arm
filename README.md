@@ -1,6 +1,6 @@
-**# README**
+# README
 
-**## Objective**
+## Objective
 
 Simulate, design, and build a 6-DOF robotic arm controlled by a microcontroller.
 
@@ -17,7 +17,7 @@ The system will use:
 - Parametric and modular design to ease modification and iterations
 
 
-**## Scope**
+## Scope
 
 - Complete mechanical design
 - BLDC motors
@@ -27,7 +27,7 @@ The system will use:
 - Experimental validation
 
 
-**## Restrictions**
+## Restrictions
 
 - Manufacturing:
     - 3D printed parts (except: screws, axles, bearings, electronics, motors, etc...)
@@ -45,7 +45,7 @@ The system will use:
     - Maximum part length: ~300 mm (diagonally printed)
 
 
-**## Current Status**
+## Current Status
 
 Project in early design phase.
 
@@ -55,13 +55,16 @@ Project in early design phase.
 - Mechanical design not started
 
 
-**## Design Approach**
+## Design Approach
 
 The system is developed using an iterative engineering workflow:
 
-1. Define requirements
-2. Perform trade studies
-3. Define system architecture
-4. Build initial design baseline
-5. Develop mathematical model
-6. Validate through simulation and experiments
+1. Problem detected
+2. Research
+3. Architecture (if applicable)
+4. Design (final decision and justification)
+5. Update design_baseline
+6. Log decision
+7. Test/validate
+
+
