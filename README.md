@@ -34,7 +34,7 @@ The system will use:
     - Maximum area of printing: 220 × 220 × 250 mm (Ender 3 V1)
   
 - Budget:
-  - Maximum: 300€
+  - V1: 300€
   
 - Hardware:
     - Controller: STM32

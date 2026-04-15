@@ -1,27 +1,28 @@
 # System Requirements
 
-## Functional Requirements
+## V1
 
-[ ] The robot shall have 6 degrees of freedom (6 DOF)
+### Functional Requirements
+
+[ ] The robot shall have 3 degrees of freedom (3 DOF)
 [ ] Predefined trajectories
-[ ] Capable of grabbing objects
 
 
-## Performance Requirements
+### Performance Requirements
 
 [ ] Maximum payload: 1 kg with fully extended arm
 [ ] Objective precision: ±X mm (to be defined)
 [ ] Repeatability: ±X mm (to be defined)
 
 
-## Constraints
+### Constraints
 
-[ ] Budget < 300€
+[ ] Budget < 300€ 
 [ ] Printing volume limited to Ender 3
 [ ] STM32
 
 
-## System Requirements
+### System Requirements
 
 [ ] Closed loop control
 [ ] Implemented dynamic model

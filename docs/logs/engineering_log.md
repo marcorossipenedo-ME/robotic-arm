@@ -30,3 +30,35 @@ To provide a structured foundation before starting design.
 ## Impact
 All future design decisions will follow this structured workflow.
 Enables traceability between requirements, design decisions, and validation.
+
+
+# LOG0003 - 2026-04-16
+
+## Context
+Initial V1 design phase. 
+
+## Change
+- Motor options research for actuators.
+- Redefined system requirements for V1.
+
+## Reason
+To assess viability of proposed system requirments for V1.
+
+## Impact
+All future design decisions will follow current system requirments.
+Acclaration of motor options and possibility of deciding.
+
+
+# LOG0004 - 2026-04-16
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Reduction system options research for actuators.
+
+## Reason
+To assess viability of proposed system requirments for V1 and continue design process.
+
+## Impact
+Acclaration of reduction system options and possibility of deciding.
