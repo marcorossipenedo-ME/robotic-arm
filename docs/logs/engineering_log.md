@@ -62,3 +62,18 @@ To assess viability of proposed system requirments for V1 and continue design pr
 
 ## Impact
 Acclaration of reduction system options and possibility of deciding.
+
+
+# LOG0005 - 2026-04-17
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Started simple direct kinematics model. Defined architecture, parameters and started formula definition.
+
+## Reason
+To help determine requirments for motor, motor placement and reduction design process.
+
+## Impact
+Better future design decisions.
