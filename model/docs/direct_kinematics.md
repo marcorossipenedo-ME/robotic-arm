@@ -46,6 +46,8 @@ Therfore, for each link and joint group, the following parameters exist:
 ## Parameters And Ecuations
 
 For a link and joint group number n:
+
+Any point in space, defined in n reference frame.
 $$
 X_n = 
 \begin{bmatrix}
@@ -54,15 +56,19 @@ y_{n}\\
 z_{n}\\
 1
 \end{bmatrix}  
-\text{: Any point in space, defined in n reference frame.} \\
+$$
+Link end position respect to its associated joint. Defined as a vector in n reference frame. Unione between two joints.
+$$
 L_n=
 \begin{bmatrix}
 x_{ln}\\
 y_{ln}\\
 z_{ln}
 \end{bmatrix} 
-\text{: Link end position respect to its associated joint. Defined as a vector in n reference frame. Unione between two joints.} \\
-j_n \text{: Angle between a reference frame and its predecessor around the n joint rotation axis. Defined as a escalar.}
+$$
+Angle between a reference frame and its predecessor around the n joint rotation axis. Defined as a escalar.
+$$
+j_n
 $$
 The following matrices can be defined:
 
