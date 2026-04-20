@@ -77,3 +77,18 @@ To help determine requirments for motor, motor placement and reduction design pr
 
 ## Impact
 Better future design decisions.
+
+
+# LOG0006 - 2026-04-20
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Finished simple direct kinematics model. 
+
+## Reason
+To help determine requirments for motor, motor placement and reduction design process.
+
+## Impact
+Better future design decisions.
