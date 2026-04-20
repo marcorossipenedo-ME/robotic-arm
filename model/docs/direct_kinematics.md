@@ -48,7 +48,7 @@ Therfore, for each link and joint group, the following parameters exist:
 For a link and joint group number n:
 
 Any point in space, defined in n reference frame.
-$$
+```math
 X_n = 
 \begin{bmatrix}
 x_{n}\\
@@ -56,24 +56,24 @@ y_{n}\\
 z_{n}\\
 1
 \end{bmatrix}  
-$$
+```
 Link end position respect to its associated joint. Defined as a vector in n reference frame. Unione between two joints.
-$$
+```math
 L_n=
 \begin{bmatrix}
 x_{ln}\\
 y_{ln}\\
 z_{ln}
 \end{bmatrix} 
-$$
+```
 Angle between a reference frame and its predecessor around the n joint rotation axis. Defined as a escalar.
-$$
+```math
 j_n
-$$
+```
 The following matrices can be defined:
 
 Rotation around the x axis of the n reference frame:
-$$
+```math
 A_x =
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
@@ -81,83 +81,83 @@ A_x =
 0 & \sin(j_n) & \cos(j_n) & 0 \\
 0 & 0 & 0 & 1
 \end{bmatrix}
-$$
+```
 
 Rotation around the y axis of the n reference frame:
-$$
+```math
 A_y = \begin{bmatrix}
 \cos(j_n) & 0 & \sin(j_n) & 0 \\
 0 & 1 & 0 & 0 \\
 -\sin(j_n) & 0 & \cos(j_n) & 0 \\
 0 & 0 & 0 & 1
 \end{bmatrix}
-$$
+```
 
 Rotation around the z axis of the n reference frame:
-$$
+```math
 A_z = \begin{bmatrix}
 \cos(j_n) & -\sin(j_n) & 0 & 0 \\
 \sin(j_n) & \cos(j_n) & 0 & 0 \\
 0 & 0 & 1 & 0\\
 0 & 0 & 0 & 1
 \end{bmatrix}
-$$
+```
 
 Movement following L_n vector:
-$$
+```math
 A_m = \begin{bmatrix}
 1 & 0 & 0 & x_{ln} \\
 0 & 1 & 0 & y_{ln} \\
 0 & 0 & 1 & z_{ln}\\
 0 & 0 & 0 & 1
 \end{bmatrix}
-$$
+```
 
 A combines all previous transformations and can be defined as:
-$$
+```math
 A(j_n, L_{n-1}) = A_m(L_{n-1}) * A_r(j_n)
-$$
+```
 In this project application, A does not need all rotation matrices, as each joint will have only one axis of rotation. Ar represents the rotation axis choosen. Transformations are applied from right to left.
 
 Using A, the follownig linear transformation can be defined:
-$$
+```math
 X_{n-1} = A(j_n, L_{n-1}) * X_n
-$$
+```
 
 In which, given some coordinates defined in a n joint reference frame, it outputs the same point in space defined in a n-1 joint reference frame. Using the angles between reference frames (J_n) and the position of the n coordinate system center, all defined in the n-1 reference frame.
 
 The inverse matrix of A can determine, given a point in space defined in a n-1 joint reference frame, the same point defined in a n joint reference frame.
 
 An unique A matrix can be defined for each joint in the robot. For example:
-$$
+```math
 A_2: \text{ J2 to J1}\\
 A_1: \text{ J1 to J0} \\
 A_0: \text{ J0 to ground reference plane}
-$$
+```
 and 
-$$
+```math
 A_0^{-1}: \text{ Ground reference plane to J0} \\
 A_1^{-1}: \text{ J0 to J1} \\
 A_2^{-1}: \text{ J1 to J2} 
-$$
+```
 
 Using each joint matrice, the following matrices can be defined:
-$$
+```math
 T_n^0 = A_0*A_1*A_2*[...]*A_n
-$$
+```
 Ad transforms any point defined in Jn reference frame to a point defined in ground reference frame.
-$$
+```math
 T_0^n = A_n^{-1}*[...]*A_2^{-1}* A_1^{-1}* A_0^{-1}
-$$
+```
 Ai transforms any point defined in ground reference frame to a point defined in Jn reference frame.
 
 These are used in the following way:
-$$
+```math
 X_{gnd} = T_n^0*X_n
-$$
-$$
+```
+```math
 X_n = T_0^n*X_{gnd}
-$$
+```
 
 
 ## References
