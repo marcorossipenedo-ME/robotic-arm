@@ -47,7 +47,7 @@ Therfore, for each link and joint group, the following parameters exist:
 
 For a link and joint group number n:
 
-Any point in space, defined in n reference frame.
+- Any point in space, defined in n reference frame.
 ```math
 X_n = 
 \begin{bmatrix}
@@ -57,7 +57,7 @@ z_{n}\\
 1
 \end{bmatrix}  
 ```
-Link end position respect to its associated joint. Defined as a vector in n reference frame. Unione between two joints.
+- Link end position respect to its associated joint. Defined as a vector in n reference frame. Unione between two joints.
 ```math
 L_n=
 \begin{bmatrix}
@@ -66,15 +66,15 @@ y_{ln}\\
 z_{ln}
 \end{bmatrix} 
 ```
-Angle between a reference frame and its predecessor around the n joint rotation axis. Defined as a escalar.
+- Angle between a reference frame and its predecessor around the n joint rotation axis. Defined as a escalar.
 ```math
 j_n
 ```
 The following matrices can be defined:
 
-Rotation around the x axis of the n reference frame:
+- Rotation around the x axis of the n reference frame:
 ```math
-A_x =
+R_x =
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
 0 & \cos(j_n) & -\sin(j_n) & 0 \\
@@ -83,9 +83,9 @@ A_x =
 \end{bmatrix}
 ```
 
-Rotation around the y axis of the n reference frame:
+- Rotation around the y axis of the n reference frame:
 ```math
-A_y = \begin{bmatrix}
+R_y = \begin{bmatrix}
 \cos(j_n) & 0 & \sin(j_n) & 0 \\
 0 & 1 & 0 & 0 \\
 -\sin(j_n) & 0 & \cos(j_n) & 0 \\
@@ -93,9 +93,9 @@ A_y = \begin{bmatrix}
 \end{bmatrix}
 ```
 
-Rotation around the z axis of the n reference frame:
+- Rotation around the z axis of the n reference frame:
 ```math
-A_z = \begin{bmatrix}
+R_z = \begin{bmatrix}
 \cos(j_n) & -\sin(j_n) & 0 & 0 \\
 \sin(j_n) & \cos(j_n) & 0 & 0 \\
 0 & 0 & 1 & 0\\
@@ -103,9 +103,9 @@ A_z = \begin{bmatrix}
 \end{bmatrix}
 ```
 
-Movement following L_n vector:
+- Movement following L_n vector:
 ```math
-A_m = \begin{bmatrix}
+T = \begin{bmatrix}
 1 & 0 & 0 & x_{ln} \\
 0 & 1 & 0 & y_{ln} \\
 0 & 0 & 1 & z_{ln}\\
@@ -115,7 +115,7 @@ A_m = \begin{bmatrix}
 
 A combines all previous transformations and can be defined as:
 ```math
-A(j_n, L_{n-1}) = A_m(L_{n-1}) * A_r(j_n)
+A(j_n, L_{n-1}) = T(L_{n-1}) * R_n(j_n)
 ```
 In this project application, A does not need all rotation matrices, as each joint will have only one axis of rotation. Ar represents the rotation axis choosen. Transformations are applied from right to left.
 
@@ -141,15 +141,15 @@ A_1^{-1}: \text{ J0 to J1} \\
 A_2^{-1}: \text{ J1 to J2} 
 ```
 
-Using each joint matrice, the following matrices can be defined:
+Using each joint matrix, the following matrices can be defined:
 ```math
 T_n^0 = A_0*A_1*A_2*[...]*A_n
 ```
-Ad transforms any point defined in Jn reference frame to a point defined in ground reference frame.
+This matrix transforms any point defined in Jn reference frame to a point defined in ground reference frame.
 ```math
 T_0^n = A_n^{-1}*[...]*A_2^{-1}* A_1^{-1}* A_0^{-1}
 ```
-Ai transforms any point defined in ground reference frame to a point defined in Jn reference frame.
+This matrix transforms any point defined in ground reference frame to a point defined in Jn reference frame.
 
 These are used in the following way:
 ```math
@@ -159,6 +159,35 @@ X_{gnd} = T_n^0*X_n
 X_n = T_0^n*X_{gnd}
 ```
 
+
+Based in the 3DOF robot diagram, the following global matrix can be defined:
+```math
+T_n^0 = \begin{bmatrix}
+cos(j_0)*cos(j_1+j_2) & -sin(j_0) & cos(j_0)*sin(j_1+j_2) & cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
+sin(j_0)*cos(j_1+j_2) & cos(j_0) & sin(j_0)*sin(j_1+j_2) & sin(j_0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
+-sin(j_1+j_2) & 0 & cos(j_1+j_2) & l_0​+l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​)\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+=
+\begin{bmatrix}
+R & p\\
+0 & 1 
+\end{bmatrix}
+```
+```math
+T_0^n = 
+\begin{bmatrix}
+R^T & -R^T*p\\
+0 & 1 
+\end{bmatrix}
+```
+Where:
+- J0 rotates around its z axis.
+- J1 and J2 rotate around their y axis.
+- The ground frame z axis is up.
+- Link 0 has only a z component in its reference frame. Lenght l_0.
+- Link 1 has only an x component in its reference frame. Lenght l_1.
+- Link 2 has only an x component in its reference frame. Lenght l_2.
 
 ## References
 

@@ -92,3 +92,19 @@ To help determine requirments for motor, motor placement and reduction design pr
 
 ## Impact
 Better future design decisions.
+
+
+# LOG0007 - 2026-04-21
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Added 3DOF case into simple kinematics model.
+Started inverse kinematics model. Defined each angle equation.
+
+## Reason
+To help determine requirments for motor, motor placement and reduction system design process.
+
+## Impact
+Better future design decisions.
