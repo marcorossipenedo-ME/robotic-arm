@@ -108,3 +108,63 @@ To help determine requirments for motor, motor placement and reduction system de
 
 ## Impact
 Better future design decisions.
+
+
+# LOG0008 - 2026-04-22
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Started kinematics model simulation coding for model testing.
+
+## Reason
+To help test direct and inverse kinematics model.
+
+## Impact
+Model improvements and verification.
+
+
+# LOG0009 - 2026-04-22
+
+## Context
+Initial V1 design phase. 
+
+## Change
+In direct kinematics model, order of multiplication in A matrix definition was changed from A(j_n, L_{n-1}) =T(L_{n-1})*R_n(j_n)  to A(j_n, L_{n-1}) = R_n(j_n)*T(L_{n-1}).
+
+## Reason
+During validation of the kinematics implementation, it was observed that applying the transformation chain to the homogeneous origin vector produced no visible rotational effect. The issue was related to the use of the origin point ([0,0,0,1]^T), which is invariant under rotation.
+
+## Impact
+Model improvements and verification.
+
+
+# LOG0010 - 2026-04-22
+
+## Context
+Initial V1 design phase. 
+
+## Change
+In direct kinematics model, the global matrix was changed. Thus the inverse kinematics equations had to be changed.
+
+## Reason
+During validation of the kinematics implementation, it was observed that zero angle position and positive angle direction were indetermined with previous configuration, where l0 was defined in z axis direction, l1 in y axis and l2 in y axis. Now all links are defined in z axis direcion, in this configuration, when all angles are zero, the arm is completelly vertical. In this position, positive joint angles make links rotate to a positive x position. Then if J0 is rotated +90º, the links located in a positive x position rotate to a positive y position.
+
+## Impact
+Model improvements and verification.
+
+
+# LOG0011 - 2026-04-28
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Direct and inverse kinematics model simulation finished and verification done.
+
+## Reason
+-
+
+## Impact
+3DOF direct and inverse kinematics model finished and validated. 

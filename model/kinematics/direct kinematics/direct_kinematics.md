@@ -115,7 +115,7 @@ T = \begin{bmatrix}
 
 A combines all previous transformations and can be defined as:
 ```math
-A(j_n, L_{n-1}) = T(L_{n-1}) * R_n(j_n)
+A(j_n, L_{n-1}) = R_n(j_n)*T(L_{n-1})
 ```
 In this project application, A does not need all rotation matrices, as each joint will have only one axis of rotation. Ar represents the rotation axis choosen. Transformations are applied from right to left.
 
@@ -123,6 +123,9 @@ Using A, the follownig linear transformation can be defined:
 ```math
 X_{n-1} = A(j_n, L_{n-1}) * X_n
 ```
+Note that in this configuration, the homogeneous transformation is applied as a translation followed by a rotation.
+
+This ordering is important because when testing the transformation using the origin vector ([0,0,0,1]^T), the rotational component does not produce any visible effect, since the origin is invariant under rotation. As a result, the interpretation of the transformation effect is not the desired if evaluated at the origin.
 
 In which, given some coordinates defined in a n joint reference frame, it outputs the same point in space defined in a n-1 joint reference frame. Using the angles between reference frames (J_n) and the position of the n coordinate system center, all defined in the n-1 reference frame.
 
@@ -182,12 +185,14 @@ R^T & -R^T*p\\
 \end{bmatrix}
 ```
 Where:
-- J0 rotates around its z axis.
-- J1 and J2 rotate around their y axis.
-- The ground frame z axis is up.
-- Link 0 has only a z component in its reference frame. Lenght l_0.
-- Link 1 has only an x component in its reference frame. Lenght l_1.
-- Link 2 has only an x component in its reference frame. Lenght l_2.
+
+J0 rotates around its z axis.
+J1 and J2 rotate around their y axis.
+Each joint frame z-axis is defined as upward in the home position. (every angle at zero)
+
+A modification was introduced in the kinematic convention to ensure consistency of the zero configuration across all joints. All link frames are now defined such that their local z-axis aligns with the link direction, resulting in a consistent reference configuration where all joints are aligned in the fully extended “upright” position when all joint angles are zero.
+
+This change improves the interpretability of the zero configuration and enhances numerical stability in inverse kinematics initialization, where the previous mixed-axis produced non-intuitive joint configurations.
 
 ## References
 
