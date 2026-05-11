@@ -112,7 +112,7 @@ sin(j_0)*cos(j_1+j_2) & cos(j_0) & sin(j_0)*sin(j_1+j_2) & sin(j_0​)*(l_1*​c
 \begin{bmatrix}
 cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
 sin(j_0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
-l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​) \\
+l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​) \\ 
 1
 \end{bmatrix}
 ```
@@ -132,3 +132,9 @@ j_1=atan2(z,\sqrt{x^2+y^2})−atan2(l_2​*sin(j_2)​,l_1​+l_2*​cos(j_2​)
 ```math
 j_2=±arccos(\frac{x^2+y^2+z^2−l_1^2​−l_2^2}{2*l_1*l_2​​})
 ```
+
+## References
+
+### Learning resources
+1. Introductory robotics lecture (YouTube) 
+   https://www.youtube.com/watch?v=8D0sO8mymQ8

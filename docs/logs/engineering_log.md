@@ -168,3 +168,18 @@ Direct and inverse kinematics model simulation finished and verification done.
 
 ## Impact
 3DOF direct and inverse kinematics model finished and validated. 
+
+
+# LOG0012 - 2026-05-11
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Started Jacobian definition and research for 3DOF robot arm. Finished basic mathematical formulation.
+
+## Reason
+Further development of robot control and kinematic model definition.
+
+## Impact
+Foundation for differential kinematics and velocity control established.
