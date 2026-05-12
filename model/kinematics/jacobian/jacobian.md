@@ -64,6 +64,30 @@ z
 
 ## Singularities
 
+When:
+```math
+det(J(\theta))=0
+```
+The end effector loses the ability to move instantaneously in one or more Cartesian directions as the Jacobian rank is reduced. The determinant of the Jacobian is dependent on the joint angles. It is important to study which joint angle combinations produce singularities in order to not lose control of the end effector position. 
+
+Using the previously calculated formula for the 3DOF robot the determinant can be calculated:
+```math
+det(J(\theta))=-l_1l_2sin(\theta_2)(l_1cos(\theta_1)+l_2cos(\theta_1+\theta_2))
+```
+The following singularities result from setting the determinant equal to zero:
+```math
+sin(\theta_2)=0 \Rightarrow \theta_2 = 0º \text{ or } \theta_2 = 180º
+```
+This corresponds to a fully extended or folded configuration where l1 and l2 are aligned. In this case, the end effector can only move along the surface of a sphere of constant radius.
+
+```math
+l_1cos(\theta_1)+l_2cos(\theta_1+\theta_2)=0
+```
+In this configuration, the end effector is aligned with the rotation axis of joint 0. As a result, rotation around the base axis does not generate Cartesian motion of the end effector.
+
+If the Jacobian matrix isn't square, the determinant analysis isn't possible, so a rank analysis should be done. 
+
+As the 3DOF robot cannot orient the end effector, only locate it in space, angular velocities are not included in the Jacobian. In a future 6DOF model, end-effector orientation and angular velocity of the end effector shuld be considered.
 
 
 ## References
@@ -75,5 +99,5 @@ z
 2. Introductory general lecture (YouTube) 
    https://www.youtube.com/watch?v=h2YM0CDzDl4&t=1s
 
-3. Introductory robotics oriented lecture
+3. Introductory robotics oriented lecture, also includes dynamics
    https://publish.illinois.edu/ece470-intro-robotics/files/2021/09/ECE470Lec10FA21.pdf

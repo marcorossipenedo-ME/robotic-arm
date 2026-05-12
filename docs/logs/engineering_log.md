@@ -183,3 +183,18 @@ Further development of robot control and kinematic model definition.
 
 ## Impact
 Foundation for differential kinematics and velocity control established.
+
+
+# LOG0013 - 2026-05-13
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Finished basic Jacobian definition and research for 3DOF robot arm. Added singularity calculation.
+
+## Reason
+Further development of robot control and kinematic model definition.
+
+## Impact
+Foundation for differential kinematics and velocity control established.
