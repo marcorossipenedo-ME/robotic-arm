@@ -347,7 +347,7 @@ def inverse_jacobian_implementation(p_v, j, l):
 
 def end_effector_velocity(t):
 
-    return Vector([0, 0.2*np.sin(2*np.pi*t/5), 0])
+    return Vector([0.1, 0.5, 0])
 
 
 
@@ -384,7 +384,7 @@ zero = Vector([0,0,0,1])
 
 ##End effector initial position
 
-p_end = Vector([1,1,1])
+p_end = Vector([-2,1,0.5])
 
 ##Link lenght
 
@@ -415,13 +415,11 @@ def update():
 
     p_vel = end_effector_velocity(i)
 
-    real_p = real_p + p_vel
-    print(jaco_j)
-    print(jacobian(jaco_j, l))
+    real_p = real_p + p_vel*step
 
     j_vel = Matrix.apply(Matrix.inverse(jacobian(jaco_j, l)), p_vel)
 
-    jaco_j = jaco_j + j_vel
+    jaco_j = jaco_j + j_vel*step
 
     jaco_p = direct_k(jaco_j, zero, l)
 

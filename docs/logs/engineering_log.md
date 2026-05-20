@@ -247,3 +247,38 @@ Simulation currently not working, as jacobian matrix presents a zero first colum
 
 ## Impact
 Future validation of Jacobian.
+
+# LOG0017 - 2026-05-20
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Updated Kinematics validation model, implemented custom matrix and vector classes used in Jacobian validation model.
+
+No effects on model behaviour.
+
+## Reason
+Coherence in model programming.
+
+## Impact
+-
+
+# LOG0018 - 2026-05-21
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Reviewed IK, DK and Jacobian definitions, everything was correct. Simulation currently working. 
+
+## Reason
+The cause of the jacobian matrix presenting a zero first column was happening when end effector z=1. Other points in space don't generate problems, excluding other known singularities.
+
+Movement direction and speed does not seem to be correct. 
+
+## To do
+- Analize z=1 singularity cause.
+- Test dimensional accuracy of Jacobian implementation using model.
+- Find cause of incorrect movement.
+- Search for any other unknown singularity.
