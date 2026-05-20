@@ -198,3 +198,52 @@ Further development of robot control and kinematic model definition.
 
 ## Impact
 Foundation for differential kinematics and velocity control established.
+
+
+# LOG0014 - 2026-05-14
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Started implementation and validation of Jacobian velocity calculation within the kinematic simulation. Currently not working. A possible solution is to change vector representations from homogeneous column vectors (shape (4,1)) to flat arrays (shape (4,)) to improve numerical consistency and reduce shape-related errors in NumPy operations.
+
+## Reason
+Improve robustness and simplicity of the model code, particularly in matrix-vector multiplication and integration with Jacobian-based velocity updates.
+
+## Impact
+Simpler code and future validation of Jacobian.
+
+
+# LOG0015 - 2026-05-15
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Added Inverse Jacobian calculations in Jacobian model.
+
+Continued implementation and validation of Jacobian velocity calculation within the kinematic simulation. Changes mentioned in previous Log where applied. Currently not working. Not found a solution yet. Movement in simulation doesen't correspond to velocity definition effects.
+
+## Reason
+-
+
+## Impact
+Future validation of Jacobian.
+
+
+# LOG0016 - 2026-05-20
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Numpy will not be used for algebraic matematical operations, as it produced undesired behaviours and it's functions could not be fully controlled. Decided to create and implement custom matrix and vector classes, with custom operations. 
+
+Simulation currently not working, as jacobian matrix presents a zero first column, this leads to a failure when calculating the inverse jacobian. This should not be happening in the tested end effector position. Redefining jacobian matrix could be a solution.
+
+## Reason
+-
+
+## Impact
+Future validation of Jacobian.

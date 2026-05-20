@@ -201,7 +201,7 @@ def vector_draw():
 
     canvas.draw()
 
-# Entradas
+# Entradas y salidas
 frame = tk.Frame(root)
 frame.pack()
 

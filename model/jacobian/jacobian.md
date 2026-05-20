@@ -8,8 +8,7 @@ Determine basic jacobian matrix model for robot and explore its applications.
 ## Requirements:
 
 - Modular design, capability of moving objects (motors, joints, links, ...) and adding DOFs easily.
-- Input: joint angular velocity.
-- Output: end effector linear velocity.
+- Ability of connecting joint velocity to end effector cartesion velocity.
 
 
 ## Architecture
@@ -62,6 +61,7 @@ z
 \dot{p}  =  J(\theta)*\dot{\theta}
 ```
 
+
 ## Singularities
 
 When:
@@ -89,6 +89,35 @@ If the Jacobian matrix isn't square, the determinant analysis isn't possible, so
 
 As the 3DOF robot cannot orient the end effector, only locate it in space, angular velocities are not included in the Jacobian. In a future 6DOF model, end-effector orientation and angular velocity of the end effector shuld be considered.
 
+
+## Inverse
+
+The Jacobian matrix transforms joint velocities to end effector cartesian velocities:
+```math
+\dot{p}  =  J(\theta)*\dot{\theta}
+```
+In order to obtain joint velocities given end effector velocities, the Jacobian Inverse can be used, only if the Jacobian is a square matrix.
+```math
+\dot{\theta}  =  J(\theta)^{-1}*\dot{p}
+```
+Or the equation system defined by the Jacobian matrix transformation can be solved:
+```math
+A=l_1cos(\theta_1)+l_2cos(\theta_1+\theta_2) \\
+B=l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2) \\
+C=-l_2cos(\theta_0)sin(\theta_1+\theta_2) \\
+D=-l_2sin(\theta_0)sin(\theta_1+\theta_2) \\
+E=l_2cos(\theta_1​+\theta_2​)
+```
+
+```math
+\dot{\theta_1}=\frac{EA\dot{z}(Ccos(\theta_0)+Dsin(\theta_0))-E^{2}A(\dot{x}cos(\theta_0)+\dot{y}sin(\theta_0))}{BE^{2}A+A^{2}CE(cos(\theta_0)+sin(\theta_0))} \\
+```
+```math
+\dot{\theta_2}=\frac{\dot{z}-A\dot{\theta_1}}{E}\\
+```
+```math
+\dot{\theta_0}=\frac{E\dot{y}+\dot{\theta_1}BEsin(\theta_0)-\dot{z}D+\dot{\theta_1}AD}{EAcos(\theta_0)}
+```
 
 ## References
 
