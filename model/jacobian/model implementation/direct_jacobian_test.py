@@ -352,10 +352,10 @@ def end_effector_velocity(t):
 
 
 
-def arm_draw(pf):
+def arm_draw(pf, c):
 
-    ax.clear()
-
+    colors = np.array(['red', 'blue', 'green', 'black'])
+    
     for i in range(len(pf)-1):
 
         p0 = pf[i][:3]
@@ -365,7 +365,8 @@ def arm_draw(pf):
             p0[0], p0[1], p0[2],
             p1[0]-p0[0],
             p1[1]-p0[1],
-            p1[2]-p0[2]
+            p1[2]-p0[2], 
+            color=colors[c]
         )
 
     limit = 6
@@ -397,9 +398,9 @@ step=0.1
 
 real_p=p_end
 
-jaco_j=j
-
 jaco_p=p_end
+
+jaco_j=j
 
 i = 0
 
@@ -409,25 +410,34 @@ def update():
     global i
     global real_p
     global jaco_j
+    global jaco_p
 
     if i > 10:
         return
 
     p_vel = end_effector_velocity(i)
+    
+    j0=inverse_k(real_p, l)
 
     real_p = real_p + p_vel*step
+    
+    j1=inverse_k(real_p, l)
+    
+    j_vel=(j1-j0)*(1/step)
 
-    j_vel = Matrix.apply(Matrix.inverse(jacobian(jaco_j, l)), p_vel)
+    p_jaco_vel = Matrix.apply((jacobian(j0, l)), j_vel)
 
-    jaco_j = jaco_j + j_vel*step
+    jaco_p = jaco_p+p_jaco_vel*step
+    
+    ax.clear()
 
-    jaco_p = direct_k(jaco_j, zero, l)
+    arm_draw(direct_k(inverse_k(jaco_p, l), zero, l), 0) ##red arm
+    
+    arm_draw(direct_k(inverse_k(real_p, l), zero, l), 1) ##blue arm
 
-    arm_draw(jaco_p)
-
-    error_x = abs(jaco_p[3][0] - real_p[0])
-    error_y = abs(jaco_p[3][1] - real_p[1])
-    error_z = abs(jaco_p[3][2] - real_p[2])
+    error_x = abs(p_vel[0] - p_jaco_vel[0])
+    error_y = abs(p_vel[1] - p_jaco_vel[1])
+    error_z = abs(p_vel[2] - p_jaco_vel[2])
 
     position_error.set(
         f"x={error_x:.4f}  "

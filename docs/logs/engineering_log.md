@@ -282,3 +282,20 @@ Movement direction and speed does not seem to be correct.
 - Test dimensional accuracy of Jacobian implementation using model.
 - Find cause of incorrect movement.
 - Search for any other unknown singularity.
+
+# LOG0019 - 2026-05-21
+
+## Context
+Initial V1 design phase. 
+
+## Change
+Derived direct jacobian test from full jacobian implementation model. 
+- Test responds incorrectly. 
+- Possible cause is an incorrect Jacobian definition. 
+- Inverse Jacobian calculation found not to be the cause of last log problem, as it is not applied in direct Jacobian test.
+
+## Reason
+Searching the cause of the strange movement generatd by velocity calculaion using Jacobian.
+
+## To do
+- Find cause of incorrect movement.
