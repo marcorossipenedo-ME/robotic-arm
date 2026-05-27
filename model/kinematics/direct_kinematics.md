@@ -166,9 +166,9 @@ X_n = T_0^n*X_{gnd}
 Based in the 3DOF robot diagram, the following global matrix can be defined:
 ```math
 T_n^0 = \begin{bmatrix}
-cos(j_0)*cos(j_1+j_2) & -sin(j_0) & cos(j_0)*sin(j_1+j_2) & cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
-sin(j_0)*cos(j_1+j_2) & cos(j_0) & sin(j_0)*sin(j_1+j_2) & sin(j_0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
--sin(j_1+j_2) & 0 & cos(j_1+j_2) & l_0​+l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​)\\
+cos(j_0)cos(j_1+j_2) & -sin(j_0) & cos(j_0)sin(j_1+j_2) & cos(j_0​)(l_1sin(j_1)​+l_2​sin(j_1​+j_2​)) \\
+sin(j_0)cos(j_1+j_2) & cos(j_0) & sin(j_0)sin(j_1+j_2) & sin(j_0​)(l_1sin(j_1)​+l_2sin(j_1​+j_2​)) \\
+-sin(j_1+j_2) & 0 & cos(j_1+j_2) & l_0​+l_1cos(j_1)​+l_2cos(j_1​+j_2​)\\
 0 & 0 & 0 & 1
 \end{bmatrix}
 =

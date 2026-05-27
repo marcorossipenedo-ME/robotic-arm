@@ -248,6 +248,7 @@ Simulation currently not working, as jacobian matrix presents a zero first colum
 ## Impact
 Future validation of Jacobian.
 
+
 # LOG0017 - 2026-05-20
 
 ## Context
@@ -263,6 +264,7 @@ Coherence in model programming.
 
 ## Impact
 -
+
 
 # LOG0018 - 2026-05-21
 
@@ -283,6 +285,7 @@ Movement direction and speed does not seem to be correct.
 - Find cause of incorrect movement.
 - Search for any other unknown singularity.
 
+
 # LOG0019 - 2026-05-21
 
 ## Context
@@ -299,3 +302,76 @@ Searching the cause of the strange movement generatd by velocity calculaion usin
 
 ## To do
 - Find cause of incorrect movement.
+
+
+# LOG0020 - 2026-05-25
+
+## Context
+Initial V1 design phase. Jacoian test model responds incorrectly.  
+
+## Change
+Found possible cause of jacobian test model incorrect response. 
+
+Visually analizing the trajectory defined by the Inverse Jacobian model test, global velocity direction seems to depend on end effector frame orientation. This could mean end effector input speeds are defined in the end effector reference frame. Jacobian input speeds should be defined in the global frame, as it makes them more useful when defining trajectories.
+
+## Reason
+Solving Jacobian model problems.
+
+## To do
+- Redefine Jacobian matrix.
+- Apply new Jacobian definition to Jacobian test model.
+
+
+# LOG0021 - 2026-05-27
+
+## Context
+Initial V1 design phase. Jacoian test model responds incorrectly.  
+
+## Change
+End effector frame defined Jacobian cause discarded after reviewing Jacobian definition. It is defined in global grame.
+
+Found possible cause of jacobian test model incorrect response. 
+
+- Manually tested Direct Kinematics global matrix positional component, used for Jacobian and Inverse Kinematics definition, using a calculator.
+- Direct Kinematics end effector resulting positions using simple input joint angles were incorrect.
+  
+Tested angles:
+(joint angles)[j0,j1,j2] = [x,y,z](end effector position)
+
+[0, 0, 0] = [0, 4, 1] (expected position: [0,0,5])
+[0, 90, 0] = [0, 2, 3] (expected position: [4,0,1])
+[90, 90, 0] = [2, 0, 3] (expected position: [0,4,1])
+
+These results correspond to a robot arm with l1 and l2 links defined in local frame y axis. 
+
+This means DK global matrix does not correspond to actual link definition convention. DK matrix in direct kinematics document was not updated when changed links l1 and l2 definition in local frames from y axis to z axis, but IK calculation was updated using z axis defined matrix. This resulted in correct IK equations but incorrect Jacobian definition, as it was derived from DK document global matrix.
+
+## Reason
+Solving Jacobian model problems.
+
+## To do
+- Redefine Jacobian matrix.
+- Apply new Jacobian definition to Jacobian test model.
+
+
+# LOG0022 - 2026-05-28
+
+## Context
+Initial V1 design phase. Jacoian test model responds incorrectly.  
+
+## Change
+Redefined Jacobian using new DK global matrix.
+
+Updated inverse and direct jacobian validation models. When using new Jacobian matrix, error remains low (<0.001).
+
+More testing to be done.
+
+## Reason
+Solving Jacobian model problems.
+
+## To do
+- Update DK and IK documents and model, in order to add new DK global matrix.
+- Calculate Jacobian singularities.
+- Calculate workspace.
+- Improve kinematics model simulation results, possibly add media and test cases.
+- Add Jacobian model results.

@@ -1,9 +1,9 @@
 """ 
-# Direct and Inverse Kinematics Model Simulation and Validation
+# Direct Jacobian Model Simulation and Validation
 
 ## Objective:
 
-Test and visualize direct and inverse kinematics model
+Test and visualize direct Jacobian Model to verify correct definition.
 
 
 ## Requirements:
@@ -14,7 +14,7 @@ Input: position of the end effector.
 
 Output: 
 - Visual representation of robot joints and links in space, with movement.
-- Error between end effector position based on Jacobian calculations and kinematics.
+- Error between end effector position based on direct Jacobian calculations and kinematics.
 
 Numpy will not be used for algebraic matematical operations, as it produced undesired behaviours and it's functions could not be fully controlled. 
 
@@ -26,6 +26,7 @@ A=[[row 0],
     [...],
     [row n]]
 """
+
 
 import time
 import numpy as np
@@ -139,7 +140,7 @@ class Matrix:
 
     @staticmethod
     def identity(e):
-        B = []
+        I = []
         for i in range(e):
             row = []
             for j in range(e):
@@ -147,9 +148,9 @@ class Matrix:
                     row.append(1)
                 else:
                     row.append(0)
-            B.append(row)
+            I.append(row)
 
-        return(Matrix(B))
+        return(Matrix(I))
     
 
     def gauss_exchange(self,i,j):
@@ -309,53 +310,17 @@ def inverse_k(pr, l):
     j.append(t)
     return Vector(j)
     
-    
-
-
 def jacobian(j, l):
     return Matrix([
-        [-np.sin(j[0])*(l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])), -np.cos(j[0])*(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), -l[2]*np.cos(j[0])*np.sin(j[1]+j[2])],
-        [np.cos(j[0])*(l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])), -np.sin(j[0])*(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), -l[2]*np.sin(j[0])*np.sin(j[1]+j[2])],
-        [0, l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2]), l[2]*np.cos(j[1]+j[2])]
+        [-np.sin(j[0])*(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), np.cos(j[0])*(l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])), l[2]*np.cos(j[0])*np.cos(j[1]+j[2])],
+        [np.cos(j[0])*(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), np.sin(j[0])*(l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])), l[2]*np.sin(j[0])*np.cos(j[1]+j[2])],
+        [0, -(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), -l[2]*np.sin(j[1]+j[2])]
     ])
 
+def arm_draw(pf):
 
-"""
-def inverse_jacobian_implementation(p_v, j, l):
+    ax.clear()
 
-    A=l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])
-
-    B=l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])
-
-    C=-l[2]*np.cos(j[0])*np.sin(j[1]+j[2])
-
-    D=-l[2]*np.sin(j[0])*np.sin(j[1]+j[2])
-
-    E=l[2]*np.cos(j[1]+j[2])
-
-    j_v1=(E*A*p_v[2]*(C*np.cos(j[0])+D*np.sin(j[0]))-E*E*A*(p_v[0]*np.cos(j[0])+p_v[1]*np.sin(j[0])))/(B*E*E*A+A*A*C*E*(np.cos(j[0])+np.sin(j[0])))
-
-    j_v2=(p_v[2]-A*j_v1)/E
-
-    j_v0=(E*p_v[1]+j_v1*B*E*np.sin(j[0])-p_v[2]*D+j_v1*A*D)/(E*A*np.cos(j[0]))
-    
-    return ([j_v0, j_v1, j_v2])
-
-"""
-
-
-
-def end_effector_velocity(t):
-
-    return Vector([0.5, 0, 0])
-
-
-
-
-def arm_draw(pf, c):
-
-    colors = np.array(['red', 'blue', 'green', 'black'])
-    
     for i in range(len(pf)-1):
 
         p0 = pf[i][:3]
@@ -365,8 +330,7 @@ def arm_draw(pf, c):
             p0[0], p0[1], p0[2],
             p1[0]-p0[0],
             p1[1]-p0[1],
-            p1[2]-p0[2], 
-            color=colors[c]
+            p1[2]-p0[2]
         )
 
     limit = 6
@@ -381,74 +345,9 @@ def arm_draw(pf, c):
 
     canvas.draw()
 
-zero = Vector([0,0,0,1])
-
-##End effector initial position
-
-p_end = Vector([1,0,0.5])
-
-##Link lenght
-
-l = Vector([1,2,2])
-
-j=inverse_k(p_end, l)
-p=direct_k(j, zero, l)
-
-step=0.1
-
-real_p=p_end
-
-jaco_p=p_end
-
-jaco_j=j
-
-i = 0
-
-
-def update():
-
-    global i
-    global real_p
-    global jaco_j
-    global jaco_p
-
-    if i > 10:
-        return
-
-    p_vel = end_effector_velocity(i)
-    
-    j0=inverse_k(real_p, l)
-
-    real_p = real_p + p_vel*step
-    
-    j1=inverse_k(real_p, l)
-    
-    j_vel=(j1-j0)*(1/step)
-
-    p_jaco_vel = Matrix.apply((jacobian(j0, l)), j_vel)
-
-    jaco_p = jaco_p+p_jaco_vel*step
-    
-    ax.clear()
-
-    arm_draw(direct_k(inverse_k(jaco_p, l), zero, l), 0) ##red arm
-    
-    arm_draw(direct_k(inverse_k(real_p, l), zero, l), 1) ##blue arm
-
-    error_x = abs(p_vel[0] - p_jaco_vel[0])
-    error_y = abs(p_vel[1] - p_jaco_vel[1])
-    error_z = abs(p_vel[2] - p_jaco_vel[2])
-
-    position_error.set(
-        f"x={error_x:.4f}  "
-        f"y={error_y:.4f}  "
-        f"z={error_z:.4f}"
-    )
-
-    i += step
-
-    root.after(int(step * 1000), update)
-
+def joint_velocity(t):
+    ## Desired angular joint velocity: [J0, J1, J2]
+    return Vector([1, -1, -1])
 
 
 
@@ -464,16 +363,93 @@ ax.set_box_aspect([1,1,1])
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas.get_tk_widget().pack()
 
-# Entradas y salidas
+
 frame = tk.Frame(root)
 frame.pack()
 
-position_error = tk.StringVar()
-position_error.set("Error posicion: ")
+##Velocity error display config.
+vel_error = tk.StringVar()
+vel_error.set("Angular error: ")
 
-label_position_error = tk.Label(frame, textvariable=position_error)
-label_position_error.grid(row=6, columnspan=2)
+label_vel_error = tk.Label(frame, textvariable=vel_error)
+label_vel_error.grid(row=6, columnspan=2)
 
-update()
+
+
+
+##Zero vector
+zero = Vector([0,0,0,1])
+
+##End effector initial position
+p_end = Vector([1,1,-2])
+
+##Link lenght
+l = Vector([1,2,2])
+
+##Initial joint angles and cartesian positions
+j=inverse_k(p_end, l)
+p=direct_k(j, zero, l)
+
+##Time steps
+dt=0.001
+
+##Initial time
+t0 = time.perf_counter()
+
+real_p_end=p_end
+
+jaco_p_end=p_end
+
+
+def step_physics(dt):
+    global j, j_vel, jaco_p_end_vel, jaco_p_end, real_p_end_vel
+
+    ##Actual time since initial time
+    t = time.perf_counter() - t0
+
+    ##Joint velocity update (if non constant velocity)
+    j_vel = joint_velocity(t)
+
+    ##End effector velocity calculated by comparing current joint angles DK position and updated joint angles using joint velocity DK position.
+    real_p_end_vel = ((direct_k((j + j_vel*dt), zero, l)[3] - direct_k(j, zero, l)[3]) * (1 / dt))
+
+    ##Jacobian calculated end effector velocity
+    jaco_p_end_vel = jacobian(j, l).apply(j_vel)
+
+    ##Update of end effector position using jacobian calculated end effector velocity
+    jaco_p_end = jaco_p_end + jaco_p_end_vel * dt
+
+    ##Update of joint angles using updated end effector position
+    j = inverse_k(jaco_p_end, l)
+
+
+def physics_loop():
+
+    ## Update end effector position and cartesian velocity error every dt seconds.
+    step_physics(dt)
+
+    root.after(int(dt * 1000), physics_loop)
+
+
+def render_loop():
+
+    ## Update joint cartesian positions and draw updated arm at 30fps.
+    p = direct_k(j, zero, l)
+
+    arm_draw(p)
+
+    root.after(int(1000 / 30), render_loop)
+
+    ## Update and display cartesian velocity error.
+    vel_error.set(
+    f"j_dx={abs(jaco_p_end_vel[0]-real_p_end_vel[0]):.4f}  "
+    f"j_dy={abs(jaco_p_end_vel[1]-real_p_end_vel[1]):.4f}  "
+    f"j_dz={abs(jaco_p_end_vel[2]-real_p_end_vel[2]):.4f}"
+    )
+
+
+
+physics_loop()
+render_loop()
+
 root.mainloop()
-
