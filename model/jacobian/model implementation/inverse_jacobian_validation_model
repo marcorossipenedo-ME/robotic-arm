@@ -347,7 +347,7 @@ def arm_draw(pf):
 
 def end_effector_velocity(t):
     ## Desired cartesian end effector velocity: [vx, vy, vz]
-    return Vector([-1, 1, 0])
+    return Vector([-1, -1, 0])
 
 
 

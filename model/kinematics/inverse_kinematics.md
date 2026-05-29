@@ -75,9 +75,9 @@ Based in the direct kinematics model matrix, which for a determined X_2 point in
 ```math
 T_n^0 = 
 \begin{bmatrix}
-cos(j_0)*cos(j_1+j_2) & -sin(j_0) & cos(j_0)*sin(j_1+j_2) & cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
-sin(j_0)*cos(j_1+j_2) & cos(j_0) & sin(j_0)*sin(j_1+j_2) & sin(j0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
--sin(j_1+j_2) & 0 & cos(j_1+j_2) & l_0​+l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​)\\
+cos(\theta_0)*cos(\theta_1+\theta_2) & -sin(\theta_0) & cos(\theta_0)*sin(\theta_1+\theta_2) & cos(\theta_0​)*(l_1*​cos(\theta_1)​+l_2​*cos(\theta_1​+\theta_2​)) \\
+sin(\theta_0)*cos(\theta_1+\theta_2) & cos(\theta_0) & sin(\theta_0)*sin(\theta_1+\theta_2) & sin(j0​)*(l_1*​cos(\theta_1)​+l_2*​cos(\theta_1​+\theta_2​)) \\
+-sin(\theta_1+\theta_2) & 0 & cos(\theta_1+\theta_2) & l_0​+l_1*​sin(\theta_1)​+l_2*​sin(\theta_1​+\theta_2​)\\
 0 & 0 & 0 & 1
 \end{bmatrix}
 ```
@@ -96,9 +96,9 @@ z \\
 \end{bmatrix}
 =
 \begin{bmatrix}
-cos(j_0)*cos(j_1+j_2) & -sin(j_0) & cos(j_0)*sin(j_1+j_2) & cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
-sin(j_0)*cos(j_1+j_2) & cos(j_0) & sin(j_0)*sin(j_1+j_2) & sin(j_0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
--sin(j_1+j_2) & 0 & cos(j_1+j_2) & l_0​+l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​)\\
+cos(\theta_0)*cos(\theta_1+\theta_2) & -sin(\theta_0) & cos(\theta_0)*sin(\theta_1+\theta_2) & cos(\theta_0​)*(l_1*​cos(\theta_1)​+l_2​*cos(\theta_1​+\theta_2​)) \\
+sin(\theta_0)*cos(\theta_1+\theta_2) & cos(\theta_0) & sin(\theta_0)*sin(\theta_1+\theta_2) & sin(\theta_0​)*(l_1*​cos(\theta_1)​+l_2*​cos(\theta_1​+\theta_2​)) \\
+-sin(\theta_1+\theta_2) & 0 & cos(\theta_1+\theta_2) & l_0​+l_1*​sin(\theta_1)​+l_2*​sin(\theta_1​+\theta_2​)\\
 0 & 0 & 0 & 1
 \end{bmatrix}
 
@@ -110,27 +110,27 @@ sin(j_0)*cos(j_1+j_2) & cos(j_0) & sin(j_0)*sin(j_1+j_2) & sin(j_0​)*(l_1*​c
 \end{bmatrix}
 =
 \begin{bmatrix}
-cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
-sin(j_0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
-l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​) \\ 
+cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+l_0+l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​) \\
 1
 \end{bmatrix}
 ```
 This defines the following equation system:
 ```math
-x=cos(j_0​)*(l_1*​cos(j_1)​+l_2​*cos(j_1​+j_2​)) \\
-y=sin(j_0​)*(l_1*​cos(j_1)​+l_2*​cos(j_1​+j_2​)) \\
-z=l_1*​sin(j_1)​+l_2*​sin(j_1​+j_2​)
+x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+z=l_0+l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​)
 ```
 Using this system of equations it is possible to express each angle as a function of the global position of the end effector:
 ```math
-j_0​=atan2(y,x)
+\theta_0​=atan2(y,x)
 ```
 ```math
-j_1=atan2(z,\sqrt{x^2+y^2})−atan2(l_2​*sin(j_2)​,l_1​+l_2*​cos(j_2​))
+\theta_1=atan2(z,\sqrt{x^2+y^2})−atan2(l_2​*sin(\theta_2)​,l_1​+l_2*​cos(\theta_2​))
 ```
 ```math
-j_2=±arccos(\frac{x^2+y^2+z^2−l_1^2​−l_2^2}{2*l_1*l_2​​})
+\theta_2=±arccos(\frac{x^2+y^2+z^2−l_1^2​−l_2^2}{2*l_1*l_2​​})
 ```
 
 ## References

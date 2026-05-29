@@ -375,3 +375,22 @@ Solving Jacobian model problems.
 - Calculate workspace.
 - Improve kinematics model simulation results, possibly add media and test cases.
 - Add Jacobian model results.
+
+
+# LOG0023 - 2026-05-29
+
+## Context
+Initial V1 design phase. Jacobian test model working and validated.  
+
+## Change
+Updated DK and IK documents and model, in order to add new DK global matrix.
+Calculated Jacobian singularities.
+Added Jacobian model results, error remains low unless a singularity angle configuration is entered.
+
+## Reason
+Advancements in matematical model definition.
+
+## To do
+- Calculate workspace. (to do later in the future)
+- Improve Kinematics and Jacobian model simulation results, possibly add media and test cases. (to do later in the future)
+- Start dynamic phisics model definition.

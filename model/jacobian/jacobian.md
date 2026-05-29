@@ -17,7 +17,7 @@ From the direct kinematics model:
 ```math
 x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
 y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
-z=l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​)+l_0
+z=l_0+l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​)
 ```
 Note that the previously used j_n notation for joint angles is being changed to theta_n, in order to increase point differentiation notation identification.
 
@@ -71,11 +71,28 @@ det(J(\theta))=0
 The end effector loses the ability to move instantaneously in one or more Cartesian directions as the Jacobian rank is reduced. The determinant of the Jacobian is dependent on the joint angles. It is important to study which joint angle combinations produce singularities in order to not lose control of the end effector position. 
 
 Using the previously calculated formula for the 3DOF robot, the determinant can be calculated:
+
 ```math
-det(J(\theta))=l_1l_2sin(\theta_2​)(l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2))
+det(J(\theta))=l_1l_2sin(\theta_2)(l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2))
 ```
 The following singularities result from setting the determinant equal to zero:
 
+### Singularity 1
+```math
+sin(\theta_2)=0
+```
+This corresponds to a fully extended arm. Where link 1 is aligned to link 2.
+
+### Singularity 2
+```math
+l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2) = 0
+```
+In this case the following can be interpreted from the direct kinematics model:
+```math
+x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0
+y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0
+```
+This singularity occurs when the end effector is aligned to J0 rotation axis. (x=0, y=0)
 
 ## Inverse
 
@@ -88,6 +105,28 @@ In order to obtain joint velocities given end effector velocities, the Jacobian 
 \dot{\theta}  =  J(\theta)^{-1}*\dot{p}
 ```
 
+## Torque 
+
+Using the Jacobian matrix, the torque needed in each joint to get a desired force in the end effector can be determined.
+```math
+T=J*F
+```
+Where:
+```math
+T=\begin{bmatrix}
+T_{J0}\\
+T_{J1}\\
+T_{J2}
+\end{bmatrix}
+```
+```math
+F=\begin{bmatrix}
+F_{x}\\
+F_{y}\\
+F_{z}
+\end{bmatrix}
+```
+This is useful for the dynamics model.
 ## References
 
 ### Learning resources

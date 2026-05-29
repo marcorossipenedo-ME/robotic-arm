@@ -10,11 +10,14 @@ Test and visualize direct Jacobian Model to verify correct definition.
 
 Modular design, capability of moving objects (motors, joints, links, ...) and adding DOFs easily.
 
-Input: position of the end effector.
+Input: 
+- Initial position of the end effector.
+- Each joint angular velocity.
 
 Output: 
 - Visual representation of robot joints and links in space, with movement.
-- Error between end effector position based on direct Jacobian calculations and kinematics.
+- Error between direct Jacobian calculated and kinematics calculated end effector velocity.
+
 
 Numpy will not be used for algebraic matematical operations, as it produced undesired behaviours and it's functions could not be fully controlled. 
 
@@ -347,7 +350,7 @@ def arm_draw(pf):
 
 def joint_velocity(t):
     ## Desired angular joint velocity: [J0, J1, J2]
-    return Vector([1, -1, -1])
+    return Vector([0, 0, 1])
 
 
 

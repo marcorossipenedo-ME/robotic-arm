@@ -68,7 +68,7 @@ z_{ln}
 ```
 - Angle between a reference frame and its predecessor around the n joint rotation axis. Defined as a escalar.
 ```math
-j_n
+\theta_n
 ```
 The following matrices can be defined:
 
@@ -77,8 +77,8 @@ The following matrices can be defined:
 R_x =
 \begin{bmatrix}
 1 & 0 & 0 & 0 \\
-0 & \cos(j_n) & -\sin(j_n) & 0 \\
-0 & \sin(j_n) & \cos(j_n) & 0 \\
+0 & \cos(\theta_n) & -\sin(\theta_n) & 0 \\
+0 & \sin(\theta_n) & \cos(\theta_n) & 0 \\
 0 & 0 & 0 & 1
 \end{bmatrix}
 ```
@@ -86,9 +86,9 @@ R_x =
 - Rotation around the y axis of the n reference frame:
 ```math
 R_y = \begin{bmatrix}
-\cos(j_n) & 0 & \sin(j_n) & 0 \\
+\cos(\theta_n) & 0 & \sin(\theta_n) & 0 \\
 0 & 1 & 0 & 0 \\
--\sin(j_n) & 0 & \cos(j_n) & 0 \\
+-\sin(\theta_n) & 0 & \cos(\theta_n) & 0 \\
 0 & 0 & 0 & 1
 \end{bmatrix}
 ```
@@ -96,8 +96,8 @@ R_y = \begin{bmatrix}
 - Rotation around the z axis of the n reference frame:
 ```math
 R_z = \begin{bmatrix}
-\cos(j_n) & -\sin(j_n) & 0 & 0 \\
-\sin(j_n) & \cos(j_n) & 0 & 0 \\
+\cos(\theta_n) & -\sin(\theta_n) & 0 & 0 \\
+\sin(\theta_n) & \cos(\theta_n) & 0 & 0 \\
 0 & 0 & 1 & 0\\
 0 & 0 & 0 & 1
 \end{bmatrix}
@@ -115,19 +115,19 @@ T = \begin{bmatrix}
 
 A combines all previous transformations and can be defined as:
 ```math
-A(j_n, L_{n-1}) = R_n(j_n)*T(L_{n-1})
+A(\theta_n, L_{n-1}) = R_n(\theta_n)*T(L_{n-1})
 ```
 In this project application, A does not need all rotation matrices, as each joint will have only one axis of rotation. Ar represents the rotation axis choosen. Transformations are applied from right to left.
 
 Using A, the follownig linear transformation can be defined:
 ```math
-X_{n-1} = A(j_n, L_{n-1}) * X_n
+X_{n-1} = A(\theta_n, L_{n-1}) * X_n
 ```
 Note that in this configuration, the homogeneous transformation is applied as a translation followed by a rotation.
 
 This ordering is important because when testing the transformation using the origin vector ([0,0,0,1]^T), the rotational component does not produce any visible effect, since the origin is invariant under rotation. As a result, the interpretation of the transformation effect is not the desired if evaluated at the origin.
 
-In which, given some coordinates defined in a n joint reference frame, it outputs the same point in space defined in a n-1 joint reference frame. Using the angles between reference frames (J_n) and the position of the n coordinate system center, all defined in the n-1 reference frame.
+In which, given some coordinates defined in a n joint reference frame, it outputs the same point in space defined in a n-1 joint reference frame. Using the angles between reference frames (\theta_n) and the position of the n coordinate system center, all defined in the n-1 reference frame.
 
 The inverse matrix of A can determine, given a point in space defined in a n-1 joint reference frame, the same point defined in a n joint reference frame.
 
@@ -143,6 +143,9 @@ A_0^{-1}: \text{ Ground reference plane to J0} \\
 A_1^{-1}: \text{ J0 to J1} \\
 A_2^{-1}: \text{ J1 to J2} 
 ```
+
+## Global Matrix
+
 
 Using each joint matrix, the following matrices can be defined:
 ```math
@@ -166,9 +169,9 @@ X_n = T_0^n*X_{gnd}
 Based in the 3DOF robot diagram, the following global matrix can be defined:
 ```math
 T_n^0 = \begin{bmatrix}
-cos(j_0)cos(j_1+j_2) & -sin(j_0) & cos(j_0)sin(j_1+j_2) & cos(j_0​)(l_1sin(j_1)​+l_2​sin(j_1​+j_2​)) \\
-sin(j_0)cos(j_1+j_2) & cos(j_0) & sin(j_0)sin(j_1+j_2) & sin(j_0​)(l_1sin(j_1)​+l_2sin(j_1​+j_2​)) \\
--sin(j_1+j_2) & 0 & cos(j_1+j_2) & l_0​+l_1cos(j_1)​+l_2cos(j_1​+j_2​)\\
+cos(\theta_0)cos(\theta_1+\theta_2) & -sin(\theta_0) & cos(\theta_0)sin(\theta_1+\theta_2) & cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+sin(\theta_0)cos(\theta_1+\theta_2) & cos(\theta_0) & sin(\theta_0)sin(\theta_1+\theta_2) & sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+-sin(\theta_1+\theta_2) & 0 & cos(\theta_1+\theta_2) & l_0+l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​)\\
 0 & 0 & 0 & 1
 \end{bmatrix}
 =
@@ -194,6 +197,26 @@ A modification was introduced in the kinematic convention to ensure consistency 
 
 This change improves the interpretability of the zero configuration and enhances numerical stability in inverse kinematics initialization, where the previous mixed-axis produced non-intuitive joint configurations.
 
+## End Effector Global Coordinates
+
+In order to get the cartesian coordinates of the end effector defined on the ground reference frame given each joint angle, the zero vector should be used. As the end effector is the center of its own reference frame. 
+```math
+X_{zero}=\begin{bmatrix}
+0\\
+0\\
+0\\
+1
+\end{bmatrix}  
+```
+```math
+X_{end}=T_n^0*X_{zero}
+```
+This gives the following equations, which can be used to determine the global cartesian coordinates of the end effector, given each joint angle:
+```math
+x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
+z=l_0+l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​)
+```
 ## References
 
 ### Technical references
