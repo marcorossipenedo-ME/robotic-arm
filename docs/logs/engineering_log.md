@@ -394,3 +394,44 @@ Advancements in matematical model definition.
 - Calculate workspace. (to do later in the future)
 - Improve Kinematics and Jacobian model simulation results, possibly add media and test cases. (to do later in the future)
 - Start dynamic phisics model definition.
+
+
+# LOG0024 - 2026-06-01
+
+## Context
+Initial V1 design phase. Started dynamic model.  
+
+## Change
+Started dynamic model static gravity compensation.
+
+Defined alternative method using DK developed for this model. Explained in dynamics document.
+
+## Reason
+Advancements in matematical model definition.
+
+## To do
+- Add Newton-Euler and Jacobian based static gravity compensation methods to dynamics document.
+- Compare Newton-Euler and Jacobian based methods to DK method.
+
+
+# LOG0025 - 2026-09-23
+
+## Context
+Initial V1 design phase. Started dynamic model.  
+
+## Change
+Started dynamic model definition and understanding.
+
+Newton-Euler method will be used to define the dynamic model.
+
+Improved notation.
+
+Revised direct kinematics definition and basic link and joint layout.
+
+## Reason
+Advancements in matematical model definition.
+
+## To do
+- Revise IK and Jacobian definition.
+- Complete dynamic definition.
+- Dynamic model simulation.

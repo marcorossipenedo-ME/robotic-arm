@@ -333,11 +333,11 @@ def arm_draw(pf):
             p1[2]-p0[2]
         )
 
-    limit = 6
+    
 
-    ax.set_xlim([-limit, limit])
-    ax.set_ylim([-limit, limit])
-    ax.set_zlim([-limit, limit])
+    ax.set_xlim([-4, 4])
+    ax.set_ylim([-4, 4])
+    ax.set_zlim([-3, 5])
 
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
@@ -347,7 +347,7 @@ def arm_draw(pf):
 
 def end_effector_velocity(t):
     ## Desired cartesian end effector velocity: [vx, vy, vz]
-    return Vector([-1, -1, 0])
+    return Vector([np.sin(t), -2*np.cos(t), 0])
 
 
 

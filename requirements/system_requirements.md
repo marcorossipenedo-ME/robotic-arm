@@ -6,6 +6,7 @@
 
 [ ] The robot shall have 3 degrees of freedom (3 DOF)
 [ ] Predefined trajectories
+[ ] Trajectories defined in the end effector cartesian space (3DOF)
 
 
 ### Performance Requirements

@@ -1,11 +1,11 @@
 # Jacobian Matrix
 
-## Objective:
+## Objective
 
 Determine basic jacobian matrix model for robot and explore its applications.
 
 
-## Requirements:
+## Requirements
 
 - Modular design, capability of moving objects (motors, joints, links, ...) and adding DOFs easily.
 - Ability of connecting joint velocity to end effector cartesion velocity.
@@ -89,7 +89,7 @@ l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2) = 0
 ```
 In this case the following can be interpreted from the direct kinematics model:
 ```math
-x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0
+x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0 \\
 y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0
 ```
 This singularity occurs when the end effector is aligned to J0 rotation axis. (x=0, y=0)

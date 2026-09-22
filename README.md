@@ -6,7 +6,7 @@ Simulate, design, and build a 6-DOF robotic arm controlled by a microcontroller.
 
 Capable of:
 
-- Moving precisely, using defined trajectories
+- Moving precisely, using trajectories defined in the end effector cartesian space
 - Having a maximum carryinge capability of 1kg with a full extended arm
 - Capable of grabbing objects
 
