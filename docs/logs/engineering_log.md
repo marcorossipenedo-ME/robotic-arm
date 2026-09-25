@@ -435,3 +435,25 @@ Advancements in matematical model definition.
 - Revise IK and Jacobian definition.
 - Complete dynamic definition.
 - Dynamic model simulation.
+
+
+# LOG0026 - 2026-09-25
+
+## Context
+Initial V1 design phase. Started dynamic model.  
+
+## Change
+Changed basic robot diagram to make joint, link and reference frame numeration correspond to Newton Euler ecuations algorithm iteration index.
+
+Improved notation.
+
+Advanced defining algorithm and ecuations.
+
+Revised IK and Jacobian definition.
+
+## Reason
+Advancements in matematical model definition.
+
+## To do
+- Complete dynamic definition.
+- Dynamic model simulation.

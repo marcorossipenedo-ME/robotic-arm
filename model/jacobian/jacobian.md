@@ -4,12 +4,7 @@
 
 Determine basic jacobian matrix model for robot and explore its applications.
 
-
-## Requirements
-
-- Modular design, capability of moving objects (motors, joints, links, ...) and adding DOFs easily.
-- Ability of connecting joint velocity to end effector cartesion velocity.
-
+Given an angular velocity on any joint, the jacobian matrix outputs a cartesian \(RF_0\) end effector velocity produced by the articular motion.
 
 ## Architecture
 
@@ -19,9 +14,8 @@ x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
 y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​)) \\
 z=l_0+l_1cos(\theta_1)​+l_2cos(\theta_1​+\theta_2​)
 ```
-Note that the previously used j_n notation for joint angles is being changed to theta_n, in order to increase point differentiation notation identification.
 
-If theta_n = theta_n(t) is assumed and differentiation in function of time is done on both sides:
+If \(theta_n = theta_n(t)\) is assumed and differentiation in function of time is done on both sides:
 ```math
 \dot{x}=-\dot{\theta_0}sin(\theta_0​)(l_1​sin(\theta_1)+l_2sin(\theta_1+\theta_2))+\dot{\theta_1}​cos(\theta_0)(l_1cos(\theta_1​)+l_2cos(\theta_1+\theta_2​))+\dot{\theta_2}l_2cos(\theta_0)​cos(\theta_1+\theta_2)\\
 
@@ -40,7 +34,7 @@ cos(\theta_0)(l_1sin(\theta_1)+l_2sin(\theta_1+\theta_2)) & sin(\theta_0)(l_1cos
 \end{bmatrix}
 ```
 
-Using this matrix, any end effector cartesian velocity in space can be defined by the following application:
+Using this matrix, any end effector \(RF_0\) cartesian velocity in space can be defined by the following application:
 ```math
 p=\begin{bmatrix}
 x \\
@@ -81,7 +75,7 @@ The following singularities result from setting the determinant equal to zero:
 ```math
 sin(\theta_2)=0
 ```
-This corresponds to a fully extended arm. Where link 1 is aligned to link 2.
+This corresponds to a fully extended arm. Where L1 is aligned to L2.
 
 ### Singularity 2
 ```math
@@ -92,7 +86,7 @@ In this case the following can be interpreted from the direct kinematics model:
 x=cos(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0 \\
 y=sin(\theta_0​)(l_1sin(\theta_1)​+l_2sin(\theta_1​+\theta_2​))=0
 ```
-This singularity occurs when the end effector is aligned to J0 rotation axis. (x=0, y=0)
+This singularity occurs when the end effector is aligned to J1 rotation axis. (x=0, y=0)
 
 ## Inverse
 

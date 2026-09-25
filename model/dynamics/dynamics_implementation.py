@@ -1,34 +1,3 @@
-""" 
-# Direct Jacobian Model Simulation and Validation
-
-## Objective:
-
-Test and visualize direct Jacobian Model to verify correct definition.
-
-
-## Requirements:
-
-Modular design, capability of moving objects (motors, joints, links, ...) and adding DOFs easily.
-
-Input: position of the end effector.
-
-Output: 
-- Visual representation of robot joints and links in space, with movement.
-- Error between end effector position based on direct Jacobian calculations and kinematics.
-
-Numpy will not be used for algebraic matematical operations, as it produced undesired behaviours and it's functions could not be fully controlled. 
-
-Vectors are defined as row vectors, but represent column vectores in reality. This is due to the fact that they are easier to use and define in python.
-
-Matrix are defined as follows:
-A=[[row 0],
-    [row 1],
-    [...],
-    [row n]]
-"""
-
-
-import time
 import numpy as np
 import tkinter as tk
 import matplotlib.pyplot as plt
@@ -140,7 +109,7 @@ class Matrix:
 
     @staticmethod
     def identity(e):
-        I = []
+        B = []
         for i in range(e):
             row = []
             for j in range(e):
@@ -148,9 +117,9 @@ class Matrix:
                     row.append(1)
                 else:
                     row.append(0)
-            I.append(row)
+            B.append(row)
 
-        return(Matrix(I))
+        return(Matrix(B))
     
 
     def gauss_exchange(self,i,j):
@@ -309,147 +278,4 @@ def inverse_k(pr, l):
     j.append(np.atan2((pr[0]**2+pr[1]**2)**(0.5), pr[2]-l[0]) - np.atan2(l[2]*np.sin(t), l[1]+l[2]*np.cos(t)))
     j.append(t)
     return Vector(j)
-    
-def jacobian(j, l):
-    return Matrix([
-        [-np.sin(j[0])*(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), np.cos(j[0])*(l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])), l[2]*np.cos(j[0])*np.cos(j[1]+j[2])],
-        [np.cos(j[0])*(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), np.sin(j[0])*(l[1]*np.cos(j[1])+l[2]*np.cos(j[1]+j[2])), l[2]*np.sin(j[0])*np.cos(j[1]+j[2])],
-        [0, -(l[1]*np.sin(j[1])+l[2]*np.sin(j[1]+j[2])), -l[2]*np.sin(j[1]+j[2])]
-    ])
 
-def arm_draw(pf):
-
-    ax.clear()
-
-    for i in range(len(pf)-1):
-
-        p0 = pf[i][:3]
-        p1 = pf[i+1][:3]
-
-        ax.quiver(
-            p0[0], p0[1], p0[2],
-            p1[0]-p0[0],
-            p1[1]-p0[1],
-            p1[2]-p0[2]
-        )
-
-    
-
-    ax.set_xlim([-4, 4])
-    ax.set_ylim([-4, 4])
-    ax.set_zlim([-3, 5])
-
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_zlabel("Z")
-
-    canvas.draw()
-
-def end_effector_velocity(t):
-    ## Desired cartesian end effector velocity: [vx, vy, vz]
-    return Vector([1, 1, 0])
-
-
-
-# Main window
-root = tk.Tk()
-root.title("3D arm visualization")
-
-# Global frame space definition
-fig = plt.figure(figsize=(6, 6))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_box_aspect([1,1,1])
-
-canvas = FigureCanvasTkAgg(fig, master=root)
-canvas.get_tk_widget().pack()
-
-
-frame = tk.Frame(root)
-frame.pack()
-
-##Velocity error display config.
-vel_error = tk.StringVar()
-vel_error.set("Angular error: ")
-
-label_vel_error = tk.Label(frame, textvariable=vel_error)
-label_vel_error.grid(row=6, columnspan=2)
-
-
-
-
-##Zero vector
-zero = Vector([0,0,0,1])
-
-##End effector initial position
-p_end = Vector([1,1,2])
-
-##Link lenght
-l = Vector([1,2,2])
-
-##Initial joint angles and cartesian positions
-j=inverse_k(p_end, l)
-p=direct_k(j, zero, l)
-
-##Time steps
-dt=0.001
-
-##Initial time
-t0 = time.perf_counter()
-
-real_p_end=p_end
-
-jaco_p_end=p_end
-
-
-def step_physics(dt):
-    global j, j_vel, jaco_p_end_vel, jaco_p_end, real_p_end, real_p_end_vel
-
-    ##Actual time since initial time.
-    t = time.perf_counter() - t0
-
-    ##Cartesian end effector velocity update (if non constant velocity).
-    real_p_end_vel = end_effector_velocity(t)
-
-    ##End effector position update using cartesian end effector velocity.
-    real_p_end = real_p_end + real_p_end_vel*dt
-
-    ##Inverse Jacobian calculated joint angular velocity.
-    jaco_j_vel = (jacobian(j, l).inverse()).apply(real_p_end_vel)
-
-    ##End effector velocity calculated by comparing current joint angles DK position and updated joint angles using joint velocity DK position.
-    jaco_p_end_vel = ((direct_k((j + jaco_j_vel*dt), zero, l)[3] - direct_k(j, zero, l)[3]) * (1 / dt))
-    
-    ##Joint angle update using Jacobian calculated joint angular velocity.
-    j = j + jaco_j_vel*dt
-
-
-def physics_loop():
-
-    ## Update end effector position and cartesian velocity error every dt seconds.
-    step_physics(dt)
-
-    root.after(int(dt * 1000), physics_loop)
-
-
-def render_loop():
-
-    ## Update joint cartesian positions and draw updated arm at 30fps.
-    p = direct_k(j, zero, l)
-
-    arm_draw(p)
-
-    root.after(int(1000 / 30), render_loop)
-
-    ## Update and display cartesian velocity error.
-    vel_error.set(
-    f"vx={abs(jaco_p_end_vel[0]-real_p_end_vel[0]):.4f}  "
-    f"vy={abs(jaco_p_end_vel[1]-real_p_end_vel[1]):.4f}  "
-    f"vz={abs(jaco_p_end_vel[2]-real_p_end_vel[2]):.4f}"
-    )
-
-
-
-physics_loop()
-render_loop()
-
-root.mainloop()

@@ -1,42 +1,16 @@
 # Direct Kinematics
 
-## Objective:
+## Objective
 
 Determine basic direct kinematics model for robot. 
 
 Given a cartesian coordinates defined in a reference frame, the DK model should be able to change the reference frame in which the coordinates are defined.
 
+## Equations
 
-## Parameters And Ecuations
-
-For a link \(L_n\):
-
-- Any point in space, defined in \(R_n\).
-```math
-{}^{n}X = 
-\begin{bmatrix}
-x_{n}\\
-y_{n}\\
-z_{n}\\
-1
-\end{bmatrix}  
-```
-- Link displacement vector defined in \(R_n\). \(L_n\) represents the displacement from the joint \(J_n\), located at the start of link \(L_n\), to the origin of the reference frame \(R_n\), located at the end of the link. The vector is expressed in \(R_n\), and therefore moves and rotates together with \(R_n\).
-```math
-L_n=
-\begin{bmatrix}
-x_{ln}\\
-y_{ln}\\
-z_{ln}
-\end{bmatrix} 
-```
-- Angle between a link and its predecessor around \(J_n\) joint rotation axis. Defined as a scalar.
-```math
-\theta_n
-```
 The following matrices can be defined:
 
-- Rotation \(theta_n\) around the x axis in \(R_n-1\):
+- Rotation \(theta_n\) around the x axis in \(RF_n-1\):
 ```math
 R_x =
 \begin{bmatrix}
@@ -47,7 +21,7 @@ R_x =
 \end{bmatrix}
 ```
 
-- Rotation \(theta_n\) around the y axis in \(R_n-1\):
+- Rotation \(theta_n\) around the y axis in \(RF_n-1\):
 ```math
 R_y = \begin{bmatrix}
 \cos(\theta_n) & 0 & \sin(\theta_n) & 0 \\
@@ -57,7 +31,7 @@ R_y = \begin{bmatrix}
 \end{bmatrix}
 ```
 
-- Rotation \(theta_n\) around the z axis in \(R_n-1\):
+- Rotation \(theta_n\) around the z axis in \(RF_n-1\):
 ```math
 R_z = \begin{bmatrix}
 \cos(\theta_n) & -\sin(\theta_n) & 0 & 0 \\
@@ -93,38 +67,37 @@ This ordering is important because when testing the transformation using the ori
 
 The inverse matrix of A can determine, given a point in space defined in a n-1 joint reference frame, the same point defined in a n joint reference frame.
 
-An unique A matrix can be defined for each joint in the robot. For example:
+An unique A matrix can be defined for each link in the robot. For example:
 ```math
-{}^{1}A_2: \text{ J2 to J1}\\
-{}^{0}A_1: \text{ J1 to J0} \\
-{}^{g}A_0: \text{ J0 to ground reference plane}
+{}^{2}A_3: \text{ RF3 to RF2}\\
+{}^{1}A_2: \text{ RF2 to RF1} \\
+{}^{0}A_1: \text{ RF1 to RF0}
 ```
 and 
 ```math
-{}^{0}A_g: \text{ Ground reference plane to J0} \\
-{}^{1}A_0: \text{ J0 to J1} \\
-{}^{2}A_1: \text{ J1 to J2} 
+{}^{1}A_0: \text{ RF0 to RF1} \\
+{}^{2}A_1: \text{ RF1 to RF2} \\
+{}^{3}A_2: \text{ RF2 to RF3} 
 ```
 
 ## Global Matrix
 
-
 Using each joint matrix, the following matrices can be defined:
 ```math
-{}^{g}T_n = {}^{g}A_0*{}^{0}A_1*[...]*{}^{n-1}A_n
+{}^{0}T_n = {}^{0}A_1*{}^{1}A_2*[...]*{}^{n-1}A_n
 ```
-This matrix transforms any point defined in \(R_n\) to a point defined in \(R_g\).
+This matrix transforms any point defined in \(RF_n\) to a point defined in \(RF_0\).
 ```math
-{}^{n}T_g = {}^{n}A_{n-1}*[...]* {}^{1}A_0* {}^{0}A_g
+{}^{n}T_0 = {}^{n}A_{n-1}*[...]* {}^{2}A_1* {}^{1}A_0
 ```
-This matrix transforms any point defined in \(R_g\) to a point defined in \(R_n\).
+This matrix transforms any point defined in \(RF_0\) to a point defined in \(RF_n\).
 
 These are used in the following way:
 ```math
-X_{g} = {}^{g}T_n*X_n
+X_{0} = {}^{0}T_n*X_n
 ```
 ```math
-X_n = {}^{n}T_g*X_{g}
+X_n = {}^{n}T_0*X_{0}
 ```
 
 
@@ -151,16 +124,16 @@ R^T & -R^T*p\\
 ```
 Where:
 
-\(J_0\) rotates around \(R_g\) z axis.
+\(J_1\) rotates around \(RF_0\) z axis.
 
-\(J_1\) and \(J_2\) rotate around \(R_0\) and \(R_1\) y axis, respectively.
+\(J_2\) and \(J_3\) rotate around \(RF_1\) and \(RF_2\) y axis, respectively.
 
-When \(q=0\), each link stays alligned to \(R_g\) z axis.
+When \(q=0\), each link stays alligned to \(RF_0\) z axis.
 
 
 ## End Effector Global Coordinates
 
-In order to get the cartesian coordinates of the end effector defined on the ground reference frame given each joint angle, the zero vector should be used. As the end effector is located at the center of \(R_2\). 
+In order to get the cartesian coordinates of the end effector defined on the ground reference frame given each joint angle, the zero vector should be used. As the end effector is located at the center of \(RF_2\). 
 ```math
 X_{zero}={}^{2}X_{EE}=\begin{bmatrix}
 0\\
@@ -170,7 +143,7 @@ X_{zero}={}^{2}X_{EE}=\begin{bmatrix}
 \end{bmatrix}  
 ```
 ```math
-{}^{g}X_{EE}={}^{g}T_2*{}^{2}X_{EE}
+{}^{0}X_{EE}={}^{0}T_2*{}^{2}X_{EE}
 ```
 This gives the following equations, which can be used to determine the global cartesian coordinates of the end effector, given each joint angle:
 ```math

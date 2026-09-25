@@ -2,17 +2,12 @@
 
 ## Objective:
 
-Determine basic dynamics model for robot.
+Determine basic dynamics model for robot. 
+
+Taking into account requirements stated in model\introduction.md.
 
 
-## Requirements:
-
-- Modular design, capability of moving objects (motors, joints, links, ...) and adding DOFs easily.
-
-
-## Architecture
-
-### Newton-Euler method
+## Newton-Euler method
 
 The Newton-Euler method will be used to define the dynamic model.
 
@@ -20,62 +15,107 @@ In this method, dynamic equations are written for each link.
 
 It is best for real time dynamics calculation and model control, as equations are evaluated in a recursive and numeric way.
 
-### Newton-Euler equation definition
+
+## Basic principles
 
 All equations are derived from the following principles:
 
-#### Derivative of a vector in a moving frame
-
-Using Newton-Euler the following equations can be defined for any link i:
-```math
-\vec{F_{i-1,i}}-\vec{F_{i,i+1}}+m_i\vec{g}-m_i\vec{a_{Ci}}=\vec{0}
-``` 
-Where:
-F_{i-1,i}: force effected by link i-1 into link i
-F_{i,i+1}: force effected by link i into link i+1
-g: gravity
-m_i: link total mass
-a_{ci}: acceleration of the i link center of mass
+### Derivative of a vector in a moving frame
 
 ```math
-\vec{N_{i-1,i}}-\vec{N_{i,i+1}}-(\vec{r_{i-1,i}}+\vec{r_{i,Ci}}) \times \vec{F_{i-1,i}} + (-\vec{r_{i,Ci}}) \times (-\vec{F_{i,i+1}})-I_i\dot{\vec{w_i}}-\vec{w_i} \times (I_i\vec{w_i})
+{}^{n}a_i={}^{n}\dot{v_i}+{}^{n}w_i\times{}^{n}v_i
 ``` 
+
+### Newton dynamic equation
+
+```math
+\sum f_i=\frac{d}{dt}(mv_c)=m\dot v_c
+``` 
+
+### Euler dynamic equation
+
+```math
+\sum \tau _i=I\dot w+w\times Iw
+``` 
+
+### Action reaction law
+
+Forces applied by body i to i+1 = -applied by body i+1 to body i.
+
+
+## Newton-Euler equations definition
+
+Using the previous principles the following equations can be defined for \(L_i\), defined in \(RF_n\).
+
+```math
+{}^{n}f_{i}-{}^{n}f_{i+1}+m_i{}^{n}g=m_i{}^{n}a_{ci}
+``` 
+
+```math
+{}^{n}\tau _{i}-{}^{n}\tau _{i+1}+{}^{n}f_{i}\times {}^{n}r_{i-1,ci}-{}^{n}f_{i+1}\times {}^{n}r_{i,ci}=I_i{}^{n}\dot w_i+{}^{n}w_i\times (I_i{}^{n}w_i)
+``` 
+
 Where:
-F_{i-1,i}: force effected by link i-1 into link i
-F_{i,i+1}: force effected by link i into link i+1
-r_{i-1,i}: vector representing i link
-r_{i,Ci}: vector from end of link i to its center of mass
-g: gravity
-m_i: link total mass
-x_{ci}: position of the i link center of mass
-N_{i-1,i}: torque effected by link i-1 into link i (at joints)
-N_{i,i+1}: torque effected by link i into link i+1 (at joints)
-w_i: link angular velocity
-I_i: link inertia matrix
 
-### Inerta Matrix
+\(a_{ci}\): \(L_i\) center of mass acceleration.
 
-### Calculation Algorithm
+\(f_{i}\): force exerced by \(L_{i-1}\) to \(L_i\).
 
-For any i link in a robot consisting on n links and given:
+\(f_{i+1}\): force exerced by \(L_i\) to \(L_{i+1}\).
 
-- I_i 
-- m_i
-- r_{i-1,i}
-- r_{i,Ci}
-- g
-- m_i
-- a_{ci}
+\(\tau _{i}\): torque exerced by \(L_{i-1}\) to \(L_i\).
 
-from link 0 to n:
+\(\tau _{i+1}\): torque exerced by \(L_i\) to \(L_{i+1}\).
 
-- a_i calculation
-- w_i calculation
+\(r_{i-1,Ci}\): vector from \(R_{i-1}\) center to \(L_i\) center of mass.
 
-from link n to 0, using Newto-Euler equations:
+\(r_{i,Ci}\): vector from \(R_{i}\) center to \(L_i\) center of mass.
 
-- F_i calculation
-- N_i calculation
+
+## Calculation Algorithm
+
+For a robot consisting of n links.
+
+### Forward Recursion
+
+The following ecuations are evaluated from i=0 to i=n.
+```math
+{}^{i}w_i={}^{i-1}R_{i}^T*[{}^{i-1}w_{i-1}+\dot q_i{}^{i-1}z_{i-1}]
+``` 
+Initialized by \({}^{0}w_0\).
+```math
+{}^{i}\dot w_i={}^{i-1}R_{i}^T*[{}^{i-1}\dot w_{i-1}+\ddot q_i{}^{i-1}z_{i-1}+\dot q_i{}^{i-1}w_{i-1}\times {}^{i-1}z_{i-1}]
+``` 
+Initialized by \({}^{0}\dot w_0\).
+```math
+{}^{i}a_i={}^{i-1}R_{i}^T*{}^{i-1}a_{i-1}+{}^{i}\dot w_{i}\times {}^{i}r_{i-1,i}+{}^{i}w_i\times ({}^{i}w_i\times {}^{i}r_{i-1,i})
+``` 
+Initialized by \({}^{0}a_0-{}^{0}g\).
+```math
+{}^{i}a_{ci}={}^{i}a_i+{}^{i}\dot w_{i}\times {}^{i}r_{i,ci}+w_i\times (w_i\times {}^{i}r_{i,ci})
+``` 
+
+Where:
+
+\({}^{i-1}R_{i}^T\): rotational matrix assigned to \(J_i\) (\(R_x\), \(R_y\) or \(R_z\)).
+
+\({}^{i-1}z_{i-1}\): unit vector representing the rotational axis of \(J_i\).
+
+### Backward Recursion
+
+The following ecuations are evaluated from i=n to i=0.
+```math
+{}^{i}f_{i}={}^{i+1}f_{i+1}+m_i{}^{i}a_{ci}
+``` 
+Initializated by external force applied to \(L_n\) tip.
+```math
+{}^{i}\tau _{i}={}^{i+1}\tau _{i+1}-{}^{i}f_{i}\times {}^{i}r_{i-1,ci}+{}^{i+1}f_{i+1}\times {}^{i}r_{i,ci}+I_i{}^{i}\dot w_i+{}^{i}w_i\times (I_i{}^{i}w_i)
+``` 
+Initializated by external torque applied to \(L_n\) center of mass.
+
+
+## Inerta Matrix
+
 
 
 
